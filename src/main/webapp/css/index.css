@@ -1,0 +1,41 @@
+
+.m-content-table{overflow: hidden;width: 100%;}
+table{width:100%;border-top: 1px solid #666;border-left: 1px solid #666;}
+/* /* col{width: 20%;} */ */
+/* /* .m-content-table col{width: 14.28571%;} */ */
+/* .table-head{background-color:#a8c3fa;color:#666;} */
+/* .table-body{width:102%;overflow-y:scroll;} */
+/*  
+ * 
+ * 
+.m-header-nav span{
+	display: inline-block;
+	width: 76%;
+	line-height: 20px;
+	position: relative;
+}
+.m-header-nav input{
+	width: 100%;
+	padding: 7px 20px;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 50px;	
+}
+.m-header-nav a{
+	position: absolute;
+	width: 30px ;
+	height: 29px;
+	margin-top: 1px;
+	margin-right: 1px;
+	border-radius: 50%;	
+	top: 0;
+	right: 0;
+	overflow: hidden;
+	background: url(../img/ico_search_03.png)no-repeat center center;
+	background-size: 50%;
+	background-color: #F2F2F2;
+}
+.m-header-nav a:hover{
+	background-color: #8dd7f7;
+}
+ -----------------*/
