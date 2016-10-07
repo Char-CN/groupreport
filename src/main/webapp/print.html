@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>互联网集团数据查询系统</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	font-style: initial;
+}
+
+html, body {
+	width: 100%;
+	height: 100%;
+	font-size: 15px;
+	font-weight: normal;
+	font-family: "微软雅黑";
+}
+
+li {
+	float: left;
+	list-style: none;
+	font-size: 16px;
+}
+
+ul {
+	width: 100%;
+	line-height: 40px;
+	clear: both;
+}
+
+a {
+	text-decoration: none;
+}
+
+.s-border-c {
+	border: 1px solid #ccc;
+}
+/* g
+ ------------------*/
+.g-container {
+	width: 100%;
+	height: 100%;
+}
+
+.g-header, .g-content-1, .g-content-2 {
+	width: 900px;
+	margin-left: auto;
+	margin-right: auto;
+}
+/* header */
+.g-header h1 {
+	line-height: 45px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+
+.m-header-nav {
+	line-height: 40px;
+}
+
+.m-header-nav li {
+	width: 50%;
+	background-color: #F2F2F2;
+}
+
+.m-header-nav li:last-child {
+	text-align: right;
+}
+
+.u-month-list {
+	padding: 5px 0px;
+	border: none;
+	outline: none;
+	background-color: #F2F2F2;
+}
+
+.u-month-list option:nth-child(n+2) {
+	background-color: white;
+}
+/*  g-content
+ --------------------*/
+.m-content-table {
+	overflow: hidden;
+	width: 100%;
+}
+
+table {
+	width: 100%;
+	border-top: 1px solid #666;
+	border-left: 1px solid #666;
+}
+
+td, th {
+	padding: 10px;
+	text-align: center;
+	border-right: 1px solid #666;
+	border-bottom: 1px solid #666;
+}
+</style>
+<script src="js/jquery.min.js"></script>
+<script src="js/merge.js"></script>
+<script src="js/commons.js"></script>
+<script type="text/javascript">
+	var url_get_max_ctime = "data/getmaxctime.do";
+	var url_find_corekpi = "data/findcorekpi.do";
+	var url_update_corekpi = "data/updatecorekpi.do";
+	var url_find_financekpi = "data/findfinancekpi.do";
+	var url_update_financekpi = "data/updatefinancekpi.do";
+
+	var qeuryYear = null;
+	var qeuryYearMonth = null;
+	var initDate = function() {
+		$.post(url_get_max_ctime, function(data) {
+			$("#maxCTime").text(data);
+			var last_month = data.substring(5, 7);
+			var year = data.substring(0,4);
+			$("#monthSelect").text(year + "年" + last_month + "月");
+			qeuryYear = year;
+			qeuryYearMonth = year + last_month;
+			initCoreKpi(qeuryYearMonth, qeuryYear);
+			initFinanceKpi(qeuryYearMonth);
+		});
+	};
+
+	var initCoreKpi = function (yyyyMM, yyyy) {
+		$.post(url_find_corekpi, {yyyyMM : yyyyMM, yyyy : yyyy}, function(data) {
+			var tbody = $("#coreTable>tbody");
+			tbody.empty();
+			for (var i in data) {
+				var row = data[i];
+				var tr = $("<tr></tr>");
+				tr.append("<td>" + row.time_name + "<input class='period_key' value='"+row.period_key+"' type='hidden'><input class='time_key' value='"+row.time_key+"' type='hidden'><input class='version_key' value='"+row.version_key+"' type='hidden'></td>");
+				tr.append("<td>" + $util.toFixed0(row.register_num) + "</td>");
+				tr.append("<td class='change fixed_time_money'>" + $util.toFixed2(row.fixed_time_money) + "</td>");
+				tr.append("<td class='change fund_money'>" + $util.toFixed2(row.fund_money) + "</td>");
+				tr.append("<td class='change current_money'>" + $util.toFixed2(row.current_money) + "</td>");
+				tr.append("<td>" + $util.toFixed2(row.total_money) + "</td>");
+				tbody.append(tr);
+			}
+		});
+	};
+
+	var initFinanceKpi = function (yyyyMM) {
+		$.post(url_find_financekpi, {yyyyMM : yyyyMM}, function(data) {
+			var tbody = $("#financeTable>tbody");
+			tbody.empty();
+			for (var i in data) {
+				var row = data[i];
+				var tr = $("<tr></tr>");
+				tr.append("<td>" + row.product_type + "</td>");
+				tr.append("<td>" + row.time_limit + "</td>");
+				tr.append("<td>" + row.product_name + "<input class='product_name' value='"+row.product_name+"' type='hidden'><input class='product_type' value='"+row.product_type+"' type='hidden'><input class='time_limit' value='"+row.time_limit+"' type='hidden'><input class='period_key' value='"+row.period_key+"' type='hidden'><input class='time_key' value='"+row.time_key+"' type='hidden'><input class='version_key' value='"+row.version_key+"' type='hidden'></td>");
+				tr.append("<td class='change transaction_money'>" + $util.toFixed2(row.transaction_money) + "</td>");
+				tbody.append(tr);
+			}
+			// 合并
+			$('#financeTable').mergeCell({
+				// 目前只有cols这么一个配置项, 用数组表示列的索引,从0开始 
+				// 然后根据指定列来处理(合并)相同内容单元格
+				cols: [0, 1]  
+			});
+		});
+	};
+
+	window.onload = function() {
+		initDate();
+	};
+</script>
+</head>
+<body style="background-color:#FFFFFF">
+	<div class="g-container">
+<!-- 		<header class="g-header"> -->
+<!-- 			<h1>互联网集团数据查询系统</h1> -->
+<!-- 			<nav class="m-header-nav"> -->
+<!-- 				<ul> -->
+<!-- 					<li>&nbsp;&nbsp; <span id="monthSelect" class="u-month-list"> -->
+<!-- 					</span> -->
+<!-- 					</li> -->
+<!-- 					<li><i style="font-size: 13px;">数据更新时间：</i> <i style="font-size: 13px;" id="maxCTime"></i> &nbsp;&nbsp;</li> -->
+<!-- 				</ul> -->
+<!-- 			</nav> -->
+<!-- 		</header> -->
+		<section class="g-content-1">
+			<ul class="m-content-top">
+				<li style="float: left"><b>核心指标</b></li>
+				<li style="float: right">交易额单位：<i class="u-money"></i>万元
+				</li>
+			</ul>
+			<div class="m-content-table">
+				<div class="table-head">
+					<table id="coreTable" cellspacing="0">
+						<thead>
+							<tr>
+								<th style="width:15%;">日期</th>
+								<th style="width:12%;">注册人数</th>
+								<th style="width:13%;">定期交易额</th>
+								<th style="width:13%;">基金交易额</th>
+								<th style="width:13%;">活期交易额</th>
+								<th style="width:13%;">总交易额</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>测试年份2016</td>
+								<td>123</td>
+								<td>214321</td>
+								<td>34647</td>
+								<td>68776987</td>
+								<td>计算值</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+		<section class="g-content-2" style="margin-top: 30px;">
+			<ul class="m-content-top">
+				<li style="float: left"><b>金融产品分析指标</b></li>
+				<li style="float: right">交易额单位：<i class="u-money"></i>万元
+				</li>
+			</ul>
+			<div class="m-content-table">
+				<div class="table-head">
+					<table id="financeTable" cellspacing="0">
+						<thead>
+							<tr>
+								<th style="width:20%;">产品类型</th>
+								<th style="width:20%;">产品期限</th>
+								<th style="width:20%;">产品名称</th>
+								<th style="width:30%;">交易额</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>测试2016</td>
+								<td>123</td>
+								<td>214321</td>
+								<td>34647</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+		<br/>
+		<br/>
+	</div>
+	<div class="foot" style="height:100px;width:100px;">
+	</div>
+</body>
+</html>
