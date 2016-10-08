@@ -10,6 +10,7 @@ import org.blazer.groupreport.model.CoreKpi;
 import org.blazer.groupreport.model.FinanceKpi;
 import org.blazer.groupreport.util.BigDecimalUtil;
 import org.blazer.groupreport.util.IntegerUtil;
+import org.blazer.groupreport.util.SqlUtil;
 import org.blazer.groupreport.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +95,7 @@ public class DataService {
 		BigDecimal fixed_time_money = BigDecimalUtil.getBigDecimal0(params.get("fixed_time_money"));
 		BigDecimal fund_money = BigDecimalUtil.getBigDecimal0(params.get("fund_money"));
 		BigDecimal current_money = BigDecimalUtil.getBigDecimal0(params.get("current_money"));
+		logger.info("做了更新rp_core_kpi操作：" + SqlUtil.Show(sql, fixed_time_money, fund_money, current_money, version_key, period_key, time_key));
 		jdbcTemplate.update(sql, fixed_time_money, fund_money, current_money, version_key, period_key, time_key);
 	}
 
@@ -228,6 +230,7 @@ public class DataService {
 		String product_name = StringUtil.getStrEmpty(params.get("product_name"));
 		String sql = "update rp_finance_kpi set transaction_money=? where version_key=? and period_key=? and time_key=? and product_type=? and time_limit=? and product_name=?";
 		BigDecimal transaction_money = BigDecimalUtil.getBigDecimal0(params.get("transaction_money"));
+		logger.info("做了更新rp_finance_kpi操作：" + SqlUtil.Show(sql, transaction_money, version_key, period_key, time_key, product_type, time_limit, product_name));
 		jdbcTemplate.update(sql, transaction_money, version_key, period_key, time_key, product_type, time_limit, product_name);
 	}
 

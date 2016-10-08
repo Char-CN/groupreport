@@ -100,6 +100,7 @@ td, th {
 }
 </style>
 <script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/userservice.js"></script>
 <script src="js/merge.js"></script>
 <script src="js/commons.js"></script>
 <script type="text/javascript">
@@ -254,6 +255,13 @@ td, th {
 
 	window.onload = function() {
 		initDate();
+		var logout = $('<a href="javascript:void(0);">登出</a>');
+		logout.click(function() {
+			$userservice.logout();
+		});
+		var login = $('<span style="float: right;">用户：' + $userservice.userName + '&nbsp;&nbsp;</span>');
+		login.append(logout);
+		$("#userName").append(login);
 	};
 </script>
 </head>
@@ -267,7 +275,7 @@ td, th {
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
 					<a href="print.html">生成PDF</a>
 					</li>
-					<li><i style="font-size: 13px;">数据更新时间：</i> <i style="font-size: 13px;" id="maxCTime"></i> &nbsp;&nbsp;</li>
+					<li id="userName"><i style="font-size: 13px;">数据更新时间：</i> <i style="font-size: 13px;" id="maxCTime"></i> &nbsp;&nbsp;</li>
 				</ul>
 			</nav>
 		</header>
