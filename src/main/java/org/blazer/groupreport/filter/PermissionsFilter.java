@@ -134,11 +134,9 @@ public class PermissionsFilter implements Filter {
 			newSession = null;
 		}
 		String domain = findOneStrByReg(request.getRequestURL().toString(), "[http|https]://.*([.][a-zA-Z0-9]*[.][a-zA-Z0-9]*)/*.*");
-		System.out.println("delay ~ new session : " + newSession);
+		System.out.println("delay ~ [" + domain + "] ~ new session : " + newSession);
 		Cookie cookie = new Cookie(COOKIE_KEY, newSession);
 		cookie.setPath(COOKIE_PATH);
-//		domain = ".bigdata.blazer.org";
-		System.out.println("domain ~ " + domain);
 		cookie.setDomain(domain);
 		cookie.setMaxAge(cookieSeconds);
 		response.addCookie(cookie);
@@ -207,27 +205,5 @@ public class PermissionsFilter implements Filter {
 		}
 		return list;
 	}
-
-//	private String systemName = null;
-//
-//	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-//		System.out.println(systemName);
-//		if (systemName != null) {
-//			HttpServletRequest request = (HttpServletRequest) req;
-//			System.out.println(request.getRequestURL());
-//			System.out.println(request.getRequestURI());
-//			System.out.println(request.getRemoteHost());
-//			System.out.println(request.getRemoteAddr());
-//		}
-//		chain.doFilter(req, resp);
-//	}
-//
-//	public void init(FilterConfig filterConfig) throws ServletException {
-//		systemName = filterConfig.getInitParameter("systemName");
-//		System.out.println("init filter : " + systemName);
-//	}
-//
-//	public void destroy() {
-//	}
 
 }
