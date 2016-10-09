@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>互联网集团数据查询系统</title>
+<link rel="shortcut icon" href="images/favicon.ico">
 <style>
 * {
 	margin: 0;
@@ -142,6 +143,9 @@ td, th {
 	var initCoreKpi = function (yyyyMM, yyyy) {
 		$.post(url_find_corekpi, {yyyyMM : yyyyMM, yyyy : yyyy}, function(data) {
 			var tbody = $("#coreTable>tbody");
+			if (!flag) {
+				$("#coreTable>thead>tr>th:last").remove();
+			}
 			tbody.empty();
 			for (var i in data) {
 				var row = data[i];
@@ -152,40 +156,43 @@ td, th {
 				tr.append("<td class='change fund_money'>" + $util.toFixed2(row.fund_money) + "</td>");
 				tr.append("<td class='change current_money'>" + $util.toFixed2(row.current_money) + "</td>");
 				tr.append("<td>" + $util.toFixed2(row.total_money) + "</td>");
-				var a = $("<a href='javascript:void(0)'>修正</a>");
-				var xiuzheng = function() {
-					var tr = $(this).parent().parent();
-					tr.find(".change").each(function(i, o) {
-						var value = $(o).text().replace(new RegExp(',', 'gm'), '');
-						$(o).html($('<input style="width:100%;" value="' + value + '">'));
-					});
-					$(this).unbind('click');
-					$(this).text("确定");
-					$(this).click(function() {
-						var period_key = $(this).parent().parent().find(".period_key").val();
-						var time_key = $(this).parent().parent().find(".time_key").val();
-						var version_key = $(this).parent().parent().find(".version_key").val();
-						var fixed_time_money = $(this).parent().parent().find(".fixed_time_money>input").val();
-						var fund_money = $(this).parent().parent().find(".fund_money>input").val();
-						var current_money = $(this).parent().parent().find(".current_money>input").val();
-// 						alert(period_key + "|" + time_key + "|" + version_key + "|" + fund_money + "|" + current_money + "|" + total_money );
-						$.post(url_update_corekpi, {
-							period_key : period_key,
-							time_key : time_key,
-							version_key : version_key,
-							fixed_time_money : fixed_time_money,
-							fund_money : fund_money,
-							current_money : current_money
-						}, function(data) {
-							if (data == "false") {
-								alert("修正失败！");
-							}
-							initCoreKpi(qeuryYearMonth, qeuryYear);
+				// 判断是否有操作按钮
+				if (flag) {
+					var a = $("<a href='javascript:void(0)'>修正</a>");
+					var xiuzheng = function() {
+						var tr = $(this).parent().parent();
+						tr.find(".change").each(function(i, o) {
+							var value = $(o).text().replace(new RegExp(',', 'gm'), '');
+							$(o).html($('<input style="width:100%;" value="' + value + '">'));
 						});
-					});
-				};
-				a.click(xiuzheng);
-				tr.append($("<td></td>").append(a));
+						$(this).unbind('click');
+						$(this).text("确定");
+						$(this).click(function() {
+							var period_key = $(this).parent().parent().find(".period_key").val();
+							var time_key = $(this).parent().parent().find(".time_key").val();
+							var version_key = $(this).parent().parent().find(".version_key").val();
+							var fixed_time_money = $(this).parent().parent().find(".fixed_time_money>input").val();
+							var fund_money = $(this).parent().parent().find(".fund_money>input").val();
+							var current_money = $(this).parent().parent().find(".current_money>input").val();
+//	 						alert(period_key + "|" + time_key + "|" + version_key + "|" + fund_money + "|" + current_money + "|" + total_money );
+							$.post(url_update_corekpi, {
+								period_key : period_key,
+								time_key : time_key,
+								version_key : version_key,
+								fixed_time_money : fixed_time_money,
+								fund_money : fund_money,
+								current_money : current_money
+							}, function(data) {
+								if (data == "false") {
+									alert("修正失败！");
+								}
+								initCoreKpi(qeuryYearMonth, qeuryYear);
+							});
+						});
+					};
+					a.click(xiuzheng);
+					tr.append($("<td></td>").append(a));	
+				}
 				tbody.append(tr);
 			}
 		});
@@ -194,6 +201,9 @@ td, th {
 	var initFinanceKpi = function (yyyyMM) {
 		$.post(url_find_financekpi, {yyyyMM : yyyyMM}, function(data) {
 			var tbody = $("#financeTable>tbody");
+			if (!flag) {
+				$("#financeTable>thead>tr>th:last").remove();
+			}
 			tbody.empty();
 			for (var i in data) {
 				var row = data[i];
@@ -203,44 +213,48 @@ td, th {
 				tr.append("<td>" + row.product_name + "<input class='product_name' value='"+row.product_name+"' type='hidden'><input class='product_type' value='"+row.product_type+"' type='hidden'><input class='time_limit' value='"+row.time_limit+"' type='hidden'><input class='period_key' value='"+row.period_key+"' type='hidden'><input class='time_key' value='"+row.time_key+"' type='hidden'><input class='version_key' value='"+row.version_key+"' type='hidden'></td>");
 				tr.append("<td class='change transaction_money'>" + $util.toFixed2(row.transaction_money) + "</td>");
 				if (row.product_type != "总交易金额" && row.product_name != "小计" && row.product_name != "合计") {
-					var a = $("<a href='javascript:void(0)'>修正</a>");
-					var xiuzheng = function() {
-						var tr = $(this).parent().parent();
-						tr.find(".change").each(function(i, o) {
-							var value = $(o).text();
-							$(o).html($('<input style="width:100%;" value="' + value + '">'));
-						});
-						$(this).unbind('click');
-						$(this).text("确定");
-						$(this).click(function() {
-							var period_key = $(this).parent().parent().find(".period_key").val();
-							var time_key = $(this).parent().parent().find(".time_key").val();
-							var version_key = $(this).parent().parent().find(".version_key").val();
-							var product_name = $(this).parent().parent().find(".product_name").val();
-							var product_type = $(this).parent().parent().find(".product_type").val();
-							var time_limit = $(this).parent().parent().find(".time_limit").val();
-							var transaction_money = $(this).parent().parent().find(".transaction_money>input").val().replace(new RegExp(',', 'gm'), '');;
-//	 						alert(period_key + "|" + time_key + "|" + version_key + "|" + fund_money + "|" + current_money + "|" + total_money );
-							$.post(url_update_financekpi, {
-								period_key : period_key,
-								time_key : time_key,
-								version_key : version_key,
-								product_name : product_name,
-								product_type : product_type,
-								time_limit : time_limit,
-								transaction_money : transaction_money
-							}, function(data) {
-								if (data == "false") {
-									alert("修正失败！");
-								}
-								initFinanceKpi(qeuryYearMonth);
+					if (flag) {
+						var a = $("<a href='javascript:void(0)'>修正</a>");
+						var xiuzheng = function() {
+							var tr = $(this).parent().parent();
+							tr.find(".change").each(function(i, o) {
+								var value = $(o).text();
+								$(o).html($('<input style="width:100%;" value="' + value + '">'));
 							});
-						});
-					};
-					a.click(xiuzheng);
-					tr.append($("<td></td>").append(a));
+							$(this).unbind('click');
+							$(this).text("确定");
+							$(this).click(function() {
+								var period_key = $(this).parent().parent().find(".period_key").val();
+								var time_key = $(this).parent().parent().find(".time_key").val();
+								var version_key = $(this).parent().parent().find(".version_key").val();
+								var product_name = $(this).parent().parent().find(".product_name").val();
+								var product_type = $(this).parent().parent().find(".product_type").val();
+								var time_limit = $(this).parent().parent().find(".time_limit").val();
+								var transaction_money = $(this).parent().parent().find(".transaction_money>input").val().replace(new RegExp(',', 'gm'), '');;
+//		 						alert(period_key + "|" + time_key + "|" + version_key + "|" + fund_money + "|" + current_money + "|" + total_money );
+								$.post(url_update_financekpi, {
+									period_key : period_key,
+									time_key : time_key,
+									version_key : version_key,
+									product_name : product_name,
+									product_type : product_type,
+									time_limit : time_limit,
+									transaction_money : transaction_money
+								}, function(data) {
+									if (data == "false") {
+										alert("修正失败！");
+									}
+									initFinanceKpi(qeuryYearMonth);
+								});
+							});
+						};
+						a.click(xiuzheng);
+						tr.append($("<td></td>").append(a));
+					}
 				} else {
-					tr.append($("<td></td>"));
+					if (flag) {
+						tr.append($("<td></td>"));
+					}
 				}
 				tbody.append(tr);
 			}
@@ -253,8 +267,8 @@ td, th {
 		});
 	};
 
+	var flag = false;
 	window.onload = function() {
-		initDate();
 		var logout = $('<a href="javascript:void(0);">登出</a>');
 		logout.click(function() {
 			$userservice.logout();
@@ -262,6 +276,8 @@ td, th {
 		var login = $('<span style="float: right;">用户：' + $userservice.userName + '&nbsp;&nbsp;</span>');
 		login.append(logout);
 		$("#userName").append(login);
+		flag = $userservice.checkurl("/data/updatecorekpi.do");
+		initDate();
 	};
 </script>
 </head>
@@ -273,7 +289,8 @@ td, th {
 				<ul>
 					<li>&nbsp;&nbsp; <i style="font-size: 13px;">选择月份</i> <select id="monthSelect" class="u-month-list">
 					</select>&nbsp;&nbsp;&nbsp;&nbsp;
-					<a href="print.html">生成PDF</a>
+					<a href="print.html" target="_blank">预览PDF</a>
+					<a href="#">下载PDF</a>
 					</li>
 					<li id="userName"><i style="font-size: 13px;">数据更新时间：</i> <i style="font-size: 13px;" id="maxCTime"></i> &nbsp;&nbsp;</li>
 				</ul>

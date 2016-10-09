@@ -4,7 +4,7 @@
 	<display-name>data-service</display-name>
 
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
+		<welcome-file>toindex.html</welcome-file>
 	</welcome-file-list>
 
 	<!-- init applicationContext.xml -->
@@ -29,10 +29,6 @@
 	<servlet-mapping>
 		<servlet-name>springmvc-default-servlet</servlet-name>
 		<url-pattern>*.do</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>springmvc-default-servlet</servlet-name>
-		<url-pattern>*.action</url-pattern>
 	</servlet-mapping>
 
 	<!-- init encoding filter -->
@@ -82,6 +78,44 @@
 	<filter-mapping>
 		<filter-name>characterEncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- Permissions Filter -->
+	<filter>
+		<filter-name>PermissionsFilter</filter-name>
+		<filter-class>org.blazer.groupreport.filter.PermissionsFilter</filter-class>
+		<init-param>
+			<param-name>on-off</param-name>
+			<param-value>1</param-value>
+		</init-param>
+		<init-param>
+			<param-name>systemName</param-name>
+			<param-value>group-report</param-value>
+		</init-param>
+		<init-param>
+			<param-name>serviceUrl</param-name>
+			<param-value>http://bigdata.blazer.org:8030/user</param-value>
+		</init-param>
+		<init-param>
+			<param-name>innerServiceUrl</param-name>
+			<param-value>http://bigdata.blazer.org:8030/user</param-value>
+		</init-param>
+		<init-param>
+			<param-name>noPermissionsPage</param-name>
+			<param-value>nopermissions.html</param-value>
+		</init-param>
+		<init-param>
+			<param-name>cookieSeconds</param-name>
+			<param-value>1800</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>PermissionsFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>PermissionsFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
 	</filter-mapping>
 
 	<servlet>

@@ -23,8 +23,8 @@ public class DataService {
 
 	private static Logger logger = LoggerFactory.getLogger(DataService.class);
 
-	private static final Integer YEAR_KEY = 3600;
-	private static final Integer MONTH_KEY = 300;
+	private static final Integer TOTAL_KEY = 10000;
+	private static final Integer MONTH_KEY = 310;
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -34,7 +34,7 @@ public class DataService {
 
 	public List<CoreKpi> findCoreKpiByMonth(HashMap<String, String> params) {
 		logger.debug(params.toString());
-		Integer versionKey = versionService.getMaxVersionKey();
+		Integer versionKey = 1;
 		Integer yyyyMM = IntegerUtil.getInt0(params.get("yyyyMM"));
 		Integer yyyy = IntegerUtil.getInt0(params.get("yyyy"));
 		String sql = "select rt.time_name, rck.period_key, rck.time_key, rck.version_key,"
@@ -43,6 +43,7 @@ public class DataService {
 				+ " left join (select period_key,time_key,version_key,register_num,fixed_time_money,fund_money,current_money "
 				+ " from rp_core_kpi where version_key=? and period_key=? and time_key=?) rck on rt.time_key=rck.time_key";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, yyyyMM, versionKey, MONTH_KEY, yyyyMM);
+		logger.debug(SqlUtil.Show(sql, yyyyMM, versionKey, MONTH_KEY, yyyyMM));
 		logger.debug("list size : " + list.size());
 		List<CoreKpi> rst = new ArrayList<CoreKpi>();
 		for (Map<String, Object> map : list) {
@@ -63,7 +64,7 @@ public class DataService {
 			ck.setTotal_money(bd);
 			rst.add(ck);
 		}
-		List<Map<String, Object>> list2 = jdbcTemplate.queryForList(sql, yyyy, versionKey, YEAR_KEY, yyyy);
+		List<Map<String, Object>> list2 = jdbcTemplate.queryForList(sql, yyyy, versionKey, TOTAL_KEY, yyyy);
 		logger.debug("list2 size : " + list2.size());
 		for (Map<String, Object> map : list2) {
 			CoreKpi ck = new CoreKpi();
