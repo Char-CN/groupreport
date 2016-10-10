@@ -99,6 +99,10 @@ td, th {
 	border-right: 1px solid #666;
 	border-bottom: 1px solid #666;
 }
+/* add */
+.bgcolor {
+	background-color: #96D4DF;
+}
 </style>
 <script src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/userservice.js"></script>
@@ -254,7 +258,16 @@ td, th {
 				} else {
 					if (flag) {
 						tr.append($("<td></td>"));
+						if (row.product_name != "") {
+							tr.find("td:eq(2)").addClass("bgcolor");
+							tr.find("td:eq(3)").addClass("bgcolor");
+							tr.find("td:eq(4)").addClass("bgcolor");
+						}
 					}
+				}
+				// 总交易金额变色
+				if (row.product_type == "总交易金额") {
+					tr.addClass("bgcolor");
 				}
 				tbody.append(tr);
 			}
@@ -306,7 +319,7 @@ td, th {
 				<div class="table-head">
 					<table id="coreTable" cellspacing="0">
 						<thead>
-							<tr>
+							<tr class="bgcolor">
 								<th style="width:15%;">日期</th>
 								<th style="width:12%;">注册人数</th>
 								<th style="width:13%;">定期交易额</th>
@@ -317,15 +330,15 @@ td, th {
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>测试年份2016</td>
-								<td>123</td>
-								<td>214321</td>
-								<td>34647</td>
-								<td>68776987</td>
-								<td>计算值</td>
-								<td><a href="javascript:;">更改</a></td>
-							</tr>
+<!-- 							<tr> -->
+<!-- 								<td>测试年份2016</td> -->
+<!-- 								<td>123</td> -->
+<!-- 								<td>214321</td> -->
+<!-- 								<td>34647</td> -->
+<!-- 								<td>68776987</td> -->
+<!-- 								<td>计算值</td> -->
+<!-- 								<td><a href="javascript:;">更改</a></td> -->
+<!-- 							</tr> -->
 						</tbody>
 					</table>
 				</div>
@@ -341,7 +354,7 @@ td, th {
 				<div class="table-head">
 					<table id="financeTable" cellspacing="0">
 						<thead>
-							<tr>
+							<tr class="bgcolor">
 								<th style="width:20%;">产品类型</th>
 								<th style="width:20%;">产品期限</th>
 								<th style="width:20%;">产品名称</th>
@@ -350,13 +363,13 @@ td, th {
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>测试2016</td>
-								<td>123</td>
-								<td>214321</td>
-								<td>34647</td>
-								<td><a href="javascript:;">更改</a></td>
-							</tr>
+<!-- 							<tr> -->
+<!-- 								<td>测试2016</td> -->
+<!-- 								<td>123</td> -->
+<!-- 								<td>214321</td> -->
+<!-- 								<td>34647</td> -->
+<!-- 								<td><a href="javascript:;">更改</a></td> -->
+<!-- 							</tr> -->
 						</tbody>
 					</table>
 				</div>

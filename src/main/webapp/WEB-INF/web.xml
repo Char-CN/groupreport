@@ -108,6 +108,10 @@
 			<param-name>cookieSeconds</param-name>
 			<param-value>1800</param-value>
 		</init-param>
+		<init-param>
+			<param-name>ignoreUrls</param-name>
+			<param-value>/getpdfview.do</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>PermissionsFilter</filter-name>

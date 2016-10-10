@@ -33,9 +33,9 @@
 	<!-- jsp html mapping -->
 	<bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- -->
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/jsp/" />
-		<property name="suffix" value=".jsp" />
+<!-- 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" /> -->
+		<property name="prefix" value="/" />
+		<property name="suffix" value=".html" />
 	</bean>
 
 	<mvc:annotation-driven />
