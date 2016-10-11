@@ -15,6 +15,7 @@ import org.blazer.groupreport.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,11 @@ public class DataService {
 
 	private static Logger logger = LoggerFactory.getLogger(DataService.class);
 
-	private static final Integer TOTAL_KEY = 10000;
-	private static final Integer MONTH_KEY = 310;
+	@Value("#{systemProperties.total_key}")
+	private String total_key;
+
+	@Value("#{systemProperties.month_key}")
+	private String month_key;
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -38,12 +42,15 @@ public class DataService {
 		Integer yyyyMM = IntegerUtil.getInt0(params.get("yyyyMM"));
 		Integer yyyy = IntegerUtil.getInt0(params.get("yyyy"));
 		String sql = "select rt.time_name, rck.period_key, rck.time_key, rck.version_key,"
-				+ " rck.register_num, rck.fixed_time_money, rck.fund_money, rck.current_money"
+				+ " rck.register_num,"
+				+ " rck.fixed_time_money,"
+				+ " rck.fund_money,"
+				+ " rck.current_money"
 				+ " from (select * from rp_time where time_key=?) rt "
 				+ " left join (select period_key,time_key,version_key,register_num,fixed_time_money,fund_money,current_money "
 				+ " from rp_core_kpi where version_key=? and period_key=? and time_key=?) rck on rt.time_key=rck.time_key";
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, yyyyMM, versionKey, MONTH_KEY, yyyyMM);
-		logger.debug(SqlUtil.Show(sql, yyyyMM, versionKey, MONTH_KEY, yyyyMM));
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, yyyyMM, versionKey, month_key, yyyyMM);
+		logger.debug(SqlUtil.Show(sql, yyyyMM, versionKey, month_key, yyyyMM));
 		logger.debug("list size : " + list.size());
 		List<CoreKpi> rst = new ArrayList<CoreKpi>();
 		for (Map<String, Object> map : list) {
@@ -64,7 +71,7 @@ public class DataService {
 			ck.setTotal_money(bd);
 			rst.add(ck);
 		}
-		List<Map<String, Object>> list2 = jdbcTemplate.queryForList(sql, yyyy, versionKey, TOTAL_KEY, yyyy);
+		List<Map<String, Object>> list2 = jdbcTemplate.queryForList(sql, yyyy, versionKey, total_key, yyyy);
 		logger.debug("list2 size : " + list2.size());
 		for (Map<String, Object> map : list2) {
 			CoreKpi ck = new CoreKpi();
@@ -109,8 +116,8 @@ public class DataService {
 				+ " from (select * from rp_time where time_key=?) rt "
 				+ " left join (select period_key,time_key,version_key,product_type,time_limit,product_name,transaction_money,sort "
 				+ " from rp_finance_kpi where version_key=? and period_key=? and time_key=?) rfk on rt.time_key=rfk.time_key"
-				+ " order by rfk.sort";
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, yyyyMM, versionKey, MONTH_KEY, yyyyMM);
+				+ " order by rfk.sort, rfk.time_limit";
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, yyyyMM, versionKey, month_key, yyyyMM);
 		logger.debug("list size : " + list.size());
 		List<FinanceKpi> rst = new ArrayList<FinanceKpi>();
 
