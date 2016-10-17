@@ -51,17 +51,12 @@ public class PermissionsFilter implements Filter {
 		}
 		System.out.println("action url : " + url);
 		String sessionid = getSessionId(request);
-		// 由于是本系统，因此过滤掉
-		if ("/login.html".equals(url)) {
-			chain.doFilter(req, resp);
-			return;
-		}
 		// 过滤
 		if (url.startsWith("/userservice")) {
 			chain.doFilter(req, resp);
 			return;
 		}
-		// web.xml配置的过滤页面
+		// web.xml配置的过滤页面以及强制过滤/login.html和pwd.html
 		if (ignoreUrlsMap.contains(url)) {
 			chain.doFilter(req, resp);
 			return;
@@ -189,7 +184,11 @@ public class PermissionsFilter implements Filter {
 		} catch (Exception e) {
 			System.err.println("初始化cookie时间出错。");
 		}
+		// 过滤的URL
 		ignoreUrlsMap = new HashSet<String>();
+		// 强制过滤/login.html和/pwd.html
+		ignoreUrlsMap.add("/login.html");
+		ignoreUrlsMap.add("/pwd.html");
 		String ignoreUrls = filterConfig.getInitParameter("ignoreUrls");
 		if (ignoreUrls != null && !"".equals(ignoreUrls)) {
 			String[] urls = ignoreUrls.split(",");
