@@ -27,8 +27,8 @@ import org.apache.http.impl.client.HttpClients;
 
 public class PermissionsFilter implements Filter {
 
-	private static final String COOKIE_KEY = "MYSESSIONID";
-	private static final String COOKIE_PATH = "/";
+	public static final String COOKIE_KEY = "MYSESSIONID";
+	public static final String COOKIE_PATH = "/";
 
 	private String systemName = null;
 	private String serviceUrl = null;
@@ -154,7 +154,7 @@ public class PermissionsFilter implements Filter {
 		response.addCookie(cookie);
 	}
 
-	private String getSessionId(HttpServletRequest request) {
+	public static String getSessionId(HttpServletRequest request) {
 		String sessionValue = request.getParameter(COOKIE_KEY);
 		if (sessionValue != null) {
 			System.out.println("cookie : request params[" + COOKIE_KEY + "] | " + sessionValue);

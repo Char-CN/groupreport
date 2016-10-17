@@ -1,11 +1,12 @@
 var page = require('webpage').create();
-var url = 'http://localhost:8050/print.html';
+var system = require('system');
+var url = system.args[1];
+var path = system.args[2];
 
 page.open(url, function(){
-	console.log('open ~');
-	window.setTimeout(function() {
-		page.render('test.pdf');
-		phantom.exit();
-	}, 500);
+    console.log('open url over ~');
+    window.setTimeout(function() {
+        page.render(path);
+        phantom.exit();
+    }, 1000);
 });
-
