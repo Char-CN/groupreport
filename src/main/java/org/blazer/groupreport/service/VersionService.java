@@ -33,7 +33,7 @@ public class VersionService {
 		return maxKey;
 	}
 
-	public String getMaxVersionTime() {
+	public String getMaxVersionCreateTime() {
 		String sql = "select max(ctime) as ctime from rp_version";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 		if (list == null || list.size() == 0) {
