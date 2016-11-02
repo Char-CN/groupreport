@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.blazer.groupreport.util.IntegerUtil;
+import org.blazer.groupreport.util.SqlUtil;
 import org.blazer.groupreport.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,21 @@ public class VersionService {
 	public Integer getMaxVersionKey() {
 		String sql = "select max(version_key) as version_key from rp_version";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		if (list == null || list.size() == 0) {
+			logger.error("not found table [rp_version] max [version_key]...");
+			return 0;
+		}
+		Integer maxKey = IntegerUtil.getInt0(list.get(0).get("version_key"));
+		if (maxKey == 0) {
+			logger.error("found table max [version_key] == 0");
+		}
+		return maxKey;
+	}
+
+	public Integer getMaxVersionKeyByMonth(Integer month) {
+		String sql = "select max(version_key) as version_key from rp_core_kpi where time_key=?";
+		logger.debug(SqlUtil.Show(sql, month));
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, month);
 		if (list == null || list.size() == 0) {
 			logger.error("not found table [rp_version] max [version_key]...");
 			return 0;

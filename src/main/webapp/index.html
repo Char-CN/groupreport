@@ -106,10 +106,12 @@ td, th {
 }
 </style>
 <script src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/userservice.js"></script>
+<!-- <script type="text/javascript" src="js/userservice.js"></script> -->
+<script type="text/javascript" src="http://bigdata.blazer.org:8030/user/js/userservice.js"></script>
 <script src="js/merge.js"></script>
 <script src="js/commons.js"></script>
 <script type="text/javascript">
+	var $userservice = new $userservice("group-report");
 	var url_get_max_ctime = "data/getmaxctime.do";
 	var url_find_corekpi = "data/findcorekpi.do";
 	var url_update_corekpi = "data/updatecorekpi.do";
@@ -119,6 +121,12 @@ td, th {
 	var qeuryYear = null;
 	var qeuryYearMonth = null;
 	var initDate = function() {
+		$("#monthSelect").change(function(o) {
+			var date = "" + this.value; 
+			var year = date.substring(0,4);
+			initCoreKpi(date, year);
+			initFinanceKpi(date);
+		});
 		$.post(url_get_max_ctime, function(data) {
 			$("#maxCTime").text(data);
 			var last_month = data.substring(5, 7);
@@ -148,9 +156,6 @@ td, th {
 	var initCoreKpi = function (yyyyMM, yyyy) {
 		$.post(url_find_corekpi, {yyyyMM : yyyyMM, yyyy : yyyy}, function(data) {
 			var tbody = $("#coreTable>tbody");
-			if (!flag) {
-				$("#coreTable>thead>tr>th:last").remove();
-			}
 			tbody.empty();
 			for (var i in data) {
 				var row = data[i];
@@ -160,6 +165,7 @@ td, th {
 				tr.append("<td class='change fixed_time_money'>" + $util.toFixed2(row.fixed_time_money) + "</td>");
 				tr.append("<td class='change fund_money'>" + $util.toFixed2(row.fund_money) + "</td>");
 				tr.append("<td class='change current_money'>" + $util.toFixed2(row.current_money) + "</td>");
+				tr.append("<td class='change coupon_money'>" + $util.toFixed2(row.coupon_money) + "</td>");
 				tr.append("<td>" + $util.toFixed2(row.total_money) + "</td>");
 				// 判断是否有操作按钮
 				if (flag) {
@@ -179,6 +185,7 @@ td, th {
 							var fixed_time_money = $(this).parent().parent().find(".fixed_time_money>input").val();
 							var fund_money = $(this).parent().parent().find(".fund_money>input").val();
 							var current_money = $(this).parent().parent().find(".current_money>input").val();
+							var coupon_money = $(this).parent().parent().find(".coupon_money>input").val();
 //	 						alert(period_key + "|" + time_key + "|" + version_key + "|" + fund_money + "|" + current_money + "|" + total_money );
 							$.post(url_update_corekpi, {
 								period_key : period_key,
@@ -186,7 +193,8 @@ td, th {
 								version_key : version_key,
 								fixed_time_money : fixed_time_money,
 								fund_money : fund_money,
-								current_money : current_money
+								current_money : current_money,
+								coupon_money : coupon_money
 							}, function(data) {
 								if (data == "false") {
 									alert("修正失败！");
@@ -206,9 +214,6 @@ td, th {
 	var initFinanceKpi = function (yyyyMM) {
 		$.post(url_find_financekpi, {yyyyMM : yyyyMM}, function(data) {
 			var tbody = $("#financeTable>tbody");
-			if (!flag) {
-				$("#financeTable>thead>tr>th:last").remove();
-			}
 			tbody.empty();
 			for (var i in data) {
 				var row = data[i];
@@ -259,11 +264,11 @@ td, th {
 				} else {
 					if (flag) {
 						tr.append($("<td></td>"));
-						if (row.product_name != "") {
-							tr.find("td:eq(2)").addClass("bgcolor");
-							tr.find("td:eq(3)").addClass("bgcolor");
-							tr.find("td:eq(4)").addClass("bgcolor");
-						}
+					}
+					if (row.product_name != "") {
+						tr.find("td:eq(2)").addClass("bgcolor");
+						tr.find("td:eq(3)").addClass("bgcolor");
+						tr.find("td:eq(4)").addClass("bgcolor");
 					}
 				}
 				// 总交易金额变色
@@ -291,6 +296,12 @@ td, th {
 		login.append(logout);
 		$("#userName").append(login);
 		flag = $userservice.checkurl("/data/updatecorekpi.do");
+		if (!flag) {
+			$("#coreTable>thead>tr>th:last").remove();
+		}
+		if (!flag) {
+			$("#financeTable>thead>tr>th:last").remove();
+		}
 		initDate();
 	};
 </script>
@@ -323,10 +334,11 @@ td, th {
 							<tr class="bgcolor">
 								<th style="width:15%;">日期</th>
 								<th style="width:12%;">注册人数</th>
-								<th style="width:13%;">定期交易额</th>
-								<th style="width:13%;">基金交易额</th>
-								<th style="width:13%;">活期交易额</th>
-								<th style="width:13%;">总交易额</th>
+								<th style="width:12%;">定期交易额</th>
+								<th style="width:12%;">基金交易额</th>
+								<th style="width:12%;">活期交易额</th>
+								<th style="width:12%;">减现金券</th>
+								<th style="width:12%;">总交易额</th>
 								<th style="width:10%;">操作</th>
 							</tr>
 						</thead>

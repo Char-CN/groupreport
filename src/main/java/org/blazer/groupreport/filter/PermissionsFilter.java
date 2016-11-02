@@ -27,7 +27,7 @@ import org.apache.http.impl.client.HttpClients;
 
 public class PermissionsFilter implements Filter {
 
-	public static final String COOKIE_KEY = "MYSESSIONID";
+	public static final String COOKIE_KEY = "US_SESSION_ID";
 	public static final String COOKIE_PATH = "/";
 
 	private String systemName = null;
@@ -67,6 +67,7 @@ public class PermissionsFilter implements Filter {
 			requestUrl.append(COOKIE_KEY).append("=").append(sessionid);
 			requestUrl.append("&").append("systemName").append("=").append(systemName);
 			requestUrl.append("&").append("url").append("=").append(url);
+			System.out.println(requestUrl);
 			String content = executeGet(requestUrl.toString());
 			System.out.println("请求checkurl.do返回结果：" + content);
 			String[] contents = content.split(",", 3);

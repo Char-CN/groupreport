@@ -13,6 +13,15 @@ public class CoreKpi {
 	private BigDecimal fund_money;
 	private BigDecimal current_money;
 	private BigDecimal total_money;
+	private BigDecimal coupon_money;
+
+	public BigDecimal getCoupon_money() {
+		return coupon_money;
+	}
+
+	public void setCoupon_money(BigDecimal coupon_money) {
+		this.coupon_money = coupon_money;
+	}
 
 	public String getTime_name() {
 		return time_name;
