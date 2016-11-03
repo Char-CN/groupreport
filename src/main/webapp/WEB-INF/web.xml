@@ -83,7 +83,7 @@
 	<!-- Permissions Filter -->
 	<filter>
 		<filter-name>PermissionsFilter</filter-name>
-		<filter-class>org.blazer.groupreport.filter.PermissionsFilter</filter-class>
+		<filter-class>org.blazer.userservice.core.filter.PermissionsFilter</filter-class>
 		<init-param>
 			<param-name>on-off</param-name>
 			<param-value>1</param-value>
@@ -94,11 +94,11 @@
 		</init-param>
 		<init-param>
 			<param-name>serviceUrl</param-name>
-			<param-value>http://bigdata.blazer.org:8030/user</param-value>
+			<param-value>http://bigdata.blazer.org:8030</param-value>
 		</init-param>
 		<init-param>
 			<param-name>innerServiceUrl</param-name>
-			<param-value>http://bigdata.blazer.org:8030/user</param-value>
+			<param-value>http://bigdata.blazer.org:8030</param-value>
 		</init-param>
 		<init-param>
 			<param-name>noPermissionsPage</param-name>
