@@ -166,7 +166,7 @@ td, th {
 				tr.append("<td class='change fund_money'>" + $util.toFixed2(row.fund_money) + "</td>");
 				tr.append("<td class='change current_money'>" + $util.toFixed2(row.current_money) + "</td>");
 				tr.append("<td class='change coupon_money'>" + $util.toFixed2(row.coupon_money) + "</td>");
-				tr.append("<td>" + $util.toFixed2(row.total_money) + "</td>");
+				tr.append("<td class='bgcolor'>" + $util.toFixed2(row.total_money) + "</td>");
 				// 判断是否有操作按钮
 				if (flag) {
 					var a = $("<a href='javascript:void(0)'>修正</a>");
