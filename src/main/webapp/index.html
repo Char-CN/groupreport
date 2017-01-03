@@ -219,8 +219,15 @@ td, th {
 				var row = data[i];
 				var tr = $("<tr></tr>");
 				tr.append("<td>" + row.product_type + "</td>");
-				tr.append("<td>" + row.time_limit + "</td>");
-				tr.append("<td>" + row.product_name + "<input class='product_name' value='"+row.product_name+"' type='hidden'><input class='product_type' value='"+row.product_type+"' type='hidden'><input class='time_limit' value='"+row.time_limit+"' type='hidden'><input class='period_key' value='"+row.period_key+"' type='hidden'><input class='time_key' value='"+row.time_key+"' type='hidden'><input class='version_key' value='"+row.version_key+"' type='hidden'></td>");
+				// 合计则合并单元格
+				if (row.time_limit == "" && row.product_name == "合计") {
+					tr.append("<td class='bgcolor' colspan='2'>" + row.product_name + "<input class='product_name' value='"+row.product_name+"' type='hidden'><input class='product_type' value='"+row.product_type+"' type='hidden'><input class='time_limit' value='"+row.time_limit+"' type='hidden'><input class='period_key' value='"+row.period_key+"' type='hidden'><input class='time_key' value='"+row.time_key+"' type='hidden'><input class='version_key' value='"+row.version_key+"' type='hidden'></td>");
+				}
+				// 否则保持原样
+				else {
+					tr.append("<td>" + row.time_limit + "</td>");
+					tr.append("<td>" + row.product_name + "<input class='product_name' value='"+row.product_name+"' type='hidden'><input class='product_type' value='"+row.product_type+"' type='hidden'><input class='time_limit' value='"+row.time_limit+"' type='hidden'><input class='period_key' value='"+row.period_key+"' type='hidden'><input class='time_key' value='"+row.time_key+"' type='hidden'><input class='version_key' value='"+row.version_key+"' type='hidden'></td>");
+				}
 				tr.append("<td class='change transaction_money'>" + $util.toFixed2(row.transaction_money) + "</td>");
 				if (row.product_type != "总交易金额" && row.product_name != "小计" && row.product_name != "合计") {
 					if (flag) {
@@ -281,7 +288,7 @@ td, th {
 			$('#financeTable').mergeCell({
 				// 目前只有cols这么一个配置项, 用数组表示列的索引,从0开始 
 				// 然后根据指定列来处理(合并)相同内容单元格
-				cols: [0, 1]  
+				cols: [0, 1]
 			});
 		});
 	};
