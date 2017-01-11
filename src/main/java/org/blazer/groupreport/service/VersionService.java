@@ -1,5 +1,6 @@
 package org.blazer.groupreport.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +50,7 @@ public class VersionService {
 		return maxKey;
 	}
 
-	public String getMaxVersionCreateTime() {
+	public String getMaxVersionCreateTime(HashMap<String, String> hashMap) {
 		String sql = "select max(ctime) as ctime from rp_version";
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 		if (list == null || list.size() == 0) {

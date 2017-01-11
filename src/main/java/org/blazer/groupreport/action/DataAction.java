@@ -56,7 +56,7 @@ public class DataAction extends BaseAction {
 	@ResponseBody
 	@RequestMapping("/getmaxctime")
 	public String getConfig(HttpServletRequest request, HttpServletResponse response) {
-		return versionService.getMaxVersionCreateTime();
+		return versionService.getMaxVersionCreateTime(getParamMap(request));
 	}
 
 	@ResponseBody

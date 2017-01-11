@@ -97,10 +97,6 @@
 			<param-value>http://bigdata.blazer.org:8030</param-value>
 		</init-param>
 		<init-param>
-			<param-name>innerServiceUrl</param-name>
-			<param-value>http://bigdata.blazer.org:8030</param-value>
-		</init-param>
-		<init-param>
 			<param-name>noPermissionsPage</param-name>
 			<param-value>nopermissions.html</param-value>
 		</init-param>
@@ -111,6 +107,11 @@
 		<init-param>
 			<param-name>ignoreUrls</param-name>
 			<param-value>/getpdfview.do</param-value>
+		</init-param>
+		<!-- js模板生成 -->
+		<init-param>
+			<param-name>templateJs</param-name>
+			<param-value>/js/include_template.js:/js/include.js</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
