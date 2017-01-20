@@ -92,9 +92,10 @@
 			<param-name>systemName</param-name>
 			<param-value>group-report</param-value>
 		</init-param>
+		<!-- serviceUrl访问的服务URL，如果逗号分隔，自动切换可ping通的节点 -->
 		<init-param>
 			<param-name>serviceUrl</param-name>
-			<param-value>http://bigdata.blazer.org:8030</param-value>
+			<param-value>http://bigdata.blazer.org:8030,http://us.xiwanglife.com</param-value>
 		</init-param>
 		<init-param>
 			<param-name>noPermissionsPage</param-name>
